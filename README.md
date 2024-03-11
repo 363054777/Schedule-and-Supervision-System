@@ -11,7 +11,7 @@
 
 ## 简介
 
-若依是一套全部开源的快速开发平台，毫无保留给个人及企业免费使用。
+该系统是基于若依的日程安排与监督系统
 
 * 前端采用Vue、Element UI。
 * 后端采用Spring Boot、Spring Security、Redis & Jwt。
