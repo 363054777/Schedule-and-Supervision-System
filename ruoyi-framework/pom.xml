@@ -59,6 +59,12 @@
             <artifactId>ruoyi-system</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>schedule-item</artifactId>
+            <version>3.8.7</version>
+        </dependency>
+
     </dependencies>
 
 </project>
