@@ -86,7 +86,7 @@
           </div>
           <div class="body">
             <p>
-              <i class="el-icon-s-service"></i> 作者：王梓仰
+              <i class="el-icon-service"></i> 作者：王梓仰
             </p>
             <p>
               <i class="el-icon-s-promotion"></i> 官网：<el-link

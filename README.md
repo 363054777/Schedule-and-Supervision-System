@@ -11,7 +11,7 @@
 
 ## 简介
 
-该系统是基于若依的日程安排与监督系统
+该系统是日程安排与监督系统
 
 * 前端采用Vue、Element UI。
 * 后端采用Spring Boot、Spring Security、Redis & Jwt。
@@ -43,8 +43,8 @@
 
 ## 在线体验
 
-- admin/admin123  
-- 陆陆续续收到一些打赏，为了更好的体验已用于演示服务器升级。谢谢各位小伙伴。
+- 管理员账户 admin/admin123  
+- 用户账户 user/123456
 
 ## 演示图
 
@@ -79,6 +79,5 @@
     </tr>
     <tr>
         <td><img src="https://oscimg.oschina.net/oscnet/b6115bc8c31de52951982e509930b20684a.jpg"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-5e4daac0bb59612c5038448acbcef235e3a.png"/></td>
     </tr>
 </table>
