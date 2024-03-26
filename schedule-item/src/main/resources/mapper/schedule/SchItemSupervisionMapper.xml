@@ -2,15 +2,13 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.schedule.mapper.SchItemInforMapper">
+<mapper namespace="com.ruoyi.schedule.mapper.SchItemSupervisionMapper">
     
-    <resultMap type="SchItemInfor" id="SchItemInforResult">
+    <resultMap type="SchItemSupervision" id="SchItemSupervisionResult">
         <result property="itemId"    column="item_id"    />
         <result property="itemName"    column="item_name"    />
-        <result property="startTime"    column="start_time"    />
-        <result property="durationTime"    column="duration_time"    />
-        <result property="ifFinished"    column="if_finished"    />
-        <result property="previousItemId"    column="previous_item_id"    />
+        <result property="predictStartTime"    column="predict_start_time"    />
+        <result property="predictDurationTime"    column="predict_duration_time"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -18,31 +16,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remark"    column="remark"    />
     </resultMap>
 
-    <sql id="selectSchItemInforVo">
-        select item_id, item_name, start_time, duration_time, if_finished, previous_item_id, create_by, create_time, update_by, update_time, remark from sch_item_infor
+    <sql id="selectSchItemSupervisionVo">
+        select item_id, item_name, predict_start_time, predict_duration_time, create_by, create_time, update_by, update_time, remark from sch_item_implement
     </sql>
 
-    <select id="selectSchItemInforList" parameterType="SchItemInfor" resultMap="SchItemInforResult">
-        <include refid="selectSchItemInforVo"/>
+    <select id="selectSchItemSupervisionList" parameterType="SchItemSupervision" resultMap="SchItemSupervisionResult">
+        <include refid="selectSchItemSupervisionVo"/>
         <where>  
             <if test="itemName != null  and itemName != ''"> and item_name like concat('%', #{itemName}, '%')</if>
-            <if test="ifFinished != null  and ifFinished != ''"> and if_finished = #{ifFinished}</if>
         </where>
     </select>
     
-    <select id="selectSchItemInforByItemId" parameterType="Long" resultMap="SchItemInforResult">
-        <include refid="selectSchItemInforVo"/>
+    <select id="selectSchItemSupervisionByItemId" parameterType="Long" resultMap="SchItemSupervisionResult">
+        <include refid="selectSchItemSupervisionVo"/>
         where item_id = #{itemId}
     </select>
         
-    <insert id="insertSchItemInfor" parameterType="SchItemInfor" useGeneratedKeys="true" keyProperty="itemId">
-        insert into sch_item_infor
+    <insert id="insertSchItemSupervision" parameterType="SchItemSupervision">
+        insert into sch_item_implement
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="itemId != null">item_id,</if>
             <if test="itemName != null and itemName != ''">item_name,</if>
-            <if test="startTime != null">start_time,</if>
-            <if test="durationTime != null">duration_time,</if>
-            <if test="ifFinished != null">if_finished,</if>
-            <if test="previousItemId != null">previous_item_id,</if>
+            <if test="predictStartTime != null">predict_start_time,</if>
+            <if test="predictDurationTime != null">predict_duration_time,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
@@ -50,11 +46,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remark != null">remark,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="itemId != null">#{itemId},</if>
             <if test="itemName != null and itemName != ''">#{itemName},</if>
-            <if test="startTime != null">#{startTime},</if>
-            <if test="durationTime != null">#{durationTime},</if>
-            <if test="ifFinished != null">#{ifFinished},</if>
-            <if test="previousItemId != null">#{previousItemId},</if>
+            <if test="predictStartTime != null">#{predictStartTime},</if>
+            <if test="predictDurationTime != null">#{predictDurationTime},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
@@ -63,14 +58,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateSchItemInfor" parameterType="SchItemInfor">
-        update sch_item_infor
+    <update id="updateSchItemSupervision" parameterType="SchItemSupervision">
+        update sch_item_implement
         <trim prefix="SET" suffixOverrides=",">
             <if test="itemName != null and itemName != ''">item_name = #{itemName},</if>
-            <if test="startTime != null">start_time = #{startTime},</if>
-            <if test="durationTime != null">duration_time = #{durationTime},</if>
-            <if test="ifFinished != null">if_finished = #{ifFinished},</if>
-            <if test="previousItemId != null">previous_item_id = #{previousItemId},</if>
+            <if test="predictStartTime != null">predict_start_time = #{predictStartTime},</if>
+            <if test="predictDurationTime != null">predict_duration_time = #{predictDurationTime},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
@@ -80,15 +73,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where item_id = #{itemId}
     </update>
 
-    <delete id="deleteSchItemInforByItemId" parameterType="Long">
-        delete from sch_item_infor where item_id = #{itemId}
+    <delete id="deleteSchItemSupervisionByItemId" parameterType="Long">
+        delete from sch_item_implement where item_id = #{itemId}
     </delete>
 
-    <delete id="deleteSchItemInforByItemIds" parameterType="String">
-        delete from sch_item_infor where item_id in 
+    <delete id="deleteSchItemSupervisionByItemIds" parameterType="String">
+        delete from sch_item_implement where item_id in 
         <foreach item="itemId" collection="array" open="(" separator="," close=")">
             #{itemId}
         </foreach>
     </delete>
 
+    <select id="getItemByName" resultType="java.lang.Long">
+        SELECT item_id FROM sch_item_infor WHERE item_name = #{itemName}
+    </select>
 </mapper>

@@ -1,14 +1,13 @@
 package com.ruoyi.schedule.mapper;
 
 import java.util.List;
-
 import com.ruoyi.schedule.domain.SchItemInfor;
 
 /**
  * 日程管理Mapper接口
  * 
  * @author 王梓仰
- * @date 2024-03-23
+ * @date 2024-03-24
  */
 public interface SchItemInforMapper 
 {
@@ -59,4 +58,5 @@ public interface SchItemInforMapper
      * @return 结果
      */
     public int deleteSchItemInforByItemIds(Long[] itemIds);
+
 }

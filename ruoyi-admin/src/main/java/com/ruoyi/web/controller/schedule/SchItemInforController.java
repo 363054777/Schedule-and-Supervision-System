@@ -25,7 +25,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * 日程管理Controller
  * 
  * @author 王梓仰
- * @date 2024-03-23
+ * @date 2024-03-24
  */
 @RestController
 @RequestMapping("/schedule/item")

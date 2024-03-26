@@ -12,7 +12,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 日程管理对象 sch_item_infor
  * 
  * @author 王梓仰
- * @date 2024-03-23
+ * @date 2024-03-25
  */
 public class SchItemInfor extends BaseEntity
 {

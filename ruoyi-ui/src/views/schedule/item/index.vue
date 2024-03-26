@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
       <el-form-item label="日程项目名" prop="itemName">
         <el-input
           v-model="queryParams.itemName"
@@ -68,17 +68,23 @@
           v-hasPermi="['schedule:item:export']"
         >导出</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="info"
+          plain
+          icon="el-icon-s-opportunity"
+          size="mini"
+          @click="handleSchedule"
+          v-hasPermi="['schedule:item:schedule']"
+        >生成日程</el-button>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="itemList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="日程项目编号" align="center" prop="itemId" />
-      <el-table-column label="日程项目名" align="center" prop="itemName">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.item_finished_type" :value="scope.row.itemName"/>
-        </template>
-      </el-table-column>
+      <!-- <el-table-column label="日程项目编号" align="center" prop="itemId" /> -->
+      <el-table-column label="日程项目名" align="center" prop="itemName" />
       <el-table-column label="起始时间" align="center" prop="startTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.startTime, '{y}-{m}-{d}') }}</span>
@@ -122,7 +128,7 @@
 
     <!-- 添加或修改日程管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="日程项目名" prop="itemName">
           <el-input v-model="form.itemName" placeholder="请输入日程项目名" />
         </el-form-item>
@@ -310,6 +316,10 @@ export default {
       this.download('schedule/item/export', {
         ...this.queryParams
       }, `item_${new Date().getTime()}.xlsx`)
+    },
+    /** 日程安排 */
+    handleSchedule() {
+      this.$router.push({ path: "/schedule/schedule" });
     }
   }
 };
