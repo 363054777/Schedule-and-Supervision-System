@@ -2,8 +2,12 @@ package com.ruoyi.schedule.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.ruoyi.schedule.mapper.SchItemInforMapper;
 import com.ruoyi.schedule.mapper.SchItemSupervisionMapper;
 import com.ruoyi.schedule.domain.SchItemInfor;
 import com.ruoyi.schedule.domain.SchItemSupervision;
@@ -19,6 +23,9 @@ import com.ruoyi.schedule.service.ISchItemSupervisionService;
 public class SchItemSupervisionServiceImpl implements ISchItemSupervisionService {
     @Autowired
     private SchItemSupervisionMapper schItemSupervisionMapper;
+
+    @Autowired
+    private SchItemInforMapper schItemInforMapper;
 
     /**
      * 查询日程查看
@@ -52,6 +59,7 @@ public class SchItemSupervisionServiceImpl implements ISchItemSupervisionService
     public int insertSchItemSupervision(SchItemSupervision schItemSupervision) {
         schItemSupervision.setCreateTime(DateUtils.getNowDate());
         schItemSupervision.setItemId(getItemByName(schItemSupervision.getItemName()));
+        schItemSupervision.setCreateBy(SecurityUtils.getUsername());
         return schItemSupervisionMapper.insertSchItemSupervision(schItemSupervision);
     }
 
@@ -64,6 +72,7 @@ public class SchItemSupervisionServiceImpl implements ISchItemSupervisionService
     @Override
     public int updateSchItemSupervision(SchItemSupervision schItemSupervision) {
         schItemSupervision.setUpdateTime(DateUtils.getNowDate());
+        schItemSupervision.setUpdateBy(SecurityUtils.getUsername());
         return schItemSupervisionMapper.updateSchItemSupervision(schItemSupervision);
     }
 
@@ -92,5 +101,16 @@ public class SchItemSupervisionServiceImpl implements ISchItemSupervisionService
     @Override
     public Long getItemByName(String itemName) {
         return schItemSupervisionMapper.getItemByName(itemName);
+    }
+
+    /**
+     * 获取可用日程
+     * 
+     * @param username 日程查看主键
+     * @return 结果
+     */
+    @Override
+    public List<SchItemInfor> selectSchItemInforList() {
+        return schItemInforMapper.getValidItem(SecurityUtils.getUsername());
     }
 }

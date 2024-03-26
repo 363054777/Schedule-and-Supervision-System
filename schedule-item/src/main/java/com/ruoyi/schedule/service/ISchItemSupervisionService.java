@@ -62,4 +62,12 @@ public interface ISchItemSupervisionService
     public int deleteSchItemSupervisionByItemId(Long itemId);
 
     public Long getItemByName(String itemName);
+
+    /**
+     * 获取可用日程
+     * 
+     * @param username 日程查看主键
+     * @return 结果
+     */
+    public List<SchItemInfor> selectSchItemInforList();
 }

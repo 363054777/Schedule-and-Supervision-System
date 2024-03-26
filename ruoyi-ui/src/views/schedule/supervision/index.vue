@@ -171,15 +171,16 @@
         label-width="100px"
       >
       <el-form-item label="日程项目名" prop="itemName">
-        <el-input v-model="form.itemName" placeholder="请输入日程项目名" />
-        <!-- <el-select v-model="itemName" placeholder="请选择日程项目名" @focus="getItemNames">
+        <!-- <el-input v-model="form.itemName" placeholder="请输入日程项目名" /> -->
+        <el-select v-model="form.itemName" placeholder="请选择日程项目名" filterable>
           <el-option
             v-for="item in itemList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.name"
+            :key="item.itemId"
+            :label="item.itemName"
+            :value="item.itemName"
+            :disabled="item.status"
           ></el-option>
-        </el-select> -->
+        </el-select>
       </el-form-item>
         <el-form-item
           label="预计开始时间"
@@ -229,7 +230,7 @@
 </template>
 
 <script>
-import { listSupervision, getSupervision, delSupervision, addSupervision, updateSupervision, getItemInfor } from "@/api/schedule/supervision";
+import { listSupervision, getSupervision, delSupervision, addSupervision, updateSupervision, getItemInfor, getItemName } from "@/api/schedule/supervision";
 
 export default {
   name: "Supervision",
@@ -275,7 +276,7 @@ export default {
           { required: true, message: "预计开始时间不能为空", trigger: "blur" }
         ],
       },
-      itemList: {}, // 存储item_name选项的数组
+      itemList: [], // 存储item_name选项的数组
     };
   },
   created () {
@@ -289,6 +290,7 @@ export default {
         this.supervisionList = response.rows;
         this.total = response.total;
         this.loading = false;
+        this.getItemNames();
       });
     },
     // 取消按钮
@@ -415,9 +417,26 @@ export default {
     },
     /** 获得项目名 */
     getItemNames() {
-      // 发送请求获取sch_item_infor中的item_name数据，假设API为getItemNames
-      getItemInfor().then(response => {
-        this.itemNames = response.data; // 更新itemNames数组
+      // // 发送请求获取sch_item_infor中的item_name数据，假设API为getItemNames
+      // getItemInfor().then(response => {
+      //   this.itemNames = response.data; // 更新itemNames数组
+      // });
+      getItemName().then(response => {
+        this.itemList = response.data;
+        // this.$set(this.form, "name", response.name);
+        this.itemList.forEach(element => {
+          element.status = false;
+          var temp = element;
+          this.supervisionList.forEach(element =>{
+            if(temp.itemId === element.itemId){
+              temp.status = true;
+              return;
+            }
+          });
+          console.log(element.status);
+        });
+        console.log(this.itemList);
+        console.log(this.supervisionList);
       });
     },
     /** 打卡按钮 */

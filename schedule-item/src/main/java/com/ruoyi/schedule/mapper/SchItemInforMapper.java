@@ -59,4 +59,12 @@ public interface SchItemInforMapper
      */
     public int deleteSchItemInforByItemIds(Long[] itemIds);
 
+    /**
+     * 获取可用日程
+     * 
+     * @param username 需要删除的数据主键集合
+     * @return 结果
+     */
+    public List<SchItemInfor> getValidItem(String username);
+
 }

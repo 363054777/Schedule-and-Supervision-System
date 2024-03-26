@@ -70,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="startTime != null">start_time = #{startTime},</if>
             <if test="durationTime != null">duration_time = #{durationTime},</if>
             <if test="ifFinished != null">if_finished = #{ifFinished},</if>
-            <if test="previousItemId != null">previous_item_id = #{previousItemId},</if>
+            previous_item_id = #{previousItemId},
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
@@ -90,5 +90,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{itemId}
         </foreach>
     </delete>
+
+    <select id="getValidItem" parameterType="String" resultMap="SchItemInforResult">
+        <include refid="selectSchItemInforVo"/>
+        <where>  
+            <if test="itemName != null  and itemName != ''"> and create_by = #{itemName}</if>
+            <if test="ifFinished != null  and ifFinished != ''"> and if_finished = '0'</if>
+        </where>
+    </select>
 
 </mapper>

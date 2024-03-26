@@ -50,3 +50,11 @@ export function getItemInfor() {
     methods: 'GET',
   })
 }
+
+// 获取日程名
+export function getItemName() {
+  return request({
+    url: '/schedule/supervision/getItemName',
+    methods: 'GET'
+  })
+}

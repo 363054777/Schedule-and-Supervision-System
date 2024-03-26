@@ -16,7 +16,6 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.schedule.domain.SchItemInfor;
 import com.ruoyi.schedule.domain.SchItemSupervision;
 import com.ruoyi.schedule.service.ISchItemSupervisionService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -101,5 +100,15 @@ public class SchItemSupervisionController extends BaseController
     public AjaxResult remove(@PathVariable Long[] itemIds)
     {
         return toAjax(schItemSupervisionService.deleteSchItemSupervisionByItemIds(itemIds));
+    }
+
+    /**
+     * 获取未完成日程
+     */
+    @PreAuthorize("@ss.hasPermi('schedule:item:list')")
+    @GetMapping("/getItemName")
+    public AjaxResult getItemName(){
+        // List<SchItemInfor> itemNames = schItemSupervisionService.selectSchItemInforList(username);
+        return success(schItemSupervisionService.selectSchItemInforList());
     }
 }

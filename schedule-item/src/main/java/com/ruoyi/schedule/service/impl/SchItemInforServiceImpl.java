@@ -2,6 +2,8 @@ package com.ruoyi.schedule.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.schedule.mapper.SchItemInforMapper;
@@ -54,6 +56,7 @@ public class SchItemInforServiceImpl implements ISchItemInforService
     public int insertSchItemInfor(SchItemInfor schItemInfor)
     {
         schItemInfor.setCreateTime(DateUtils.getNowDate());
+        schItemInfor.setCreateBy(SecurityUtils.getUsername());
         return schItemInforMapper.insertSchItemInfor(schItemInfor);
     }
 
@@ -67,6 +70,7 @@ public class SchItemInforServiceImpl implements ISchItemInforService
     public int updateSchItemInfor(SchItemInfor schItemInfor)
     {
         schItemInfor.setUpdateTime(DateUtils.getNowDate());
+        schItemInfor.setUpdateBy(SecurityUtils.getUsername());
         return schItemInforMapper.updateSchItemInfor(schItemInfor);
     }
 
