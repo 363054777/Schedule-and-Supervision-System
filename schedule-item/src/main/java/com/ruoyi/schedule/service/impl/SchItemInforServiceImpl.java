@@ -43,7 +43,7 @@ public class SchItemInforServiceImpl implements ISchItemInforService
     @Override
     public List<SchItemInfor> selectSchItemInforList(SchItemInfor schItemInfor)
     {
-        return schItemInforMapper.selectSchItemInforList(schItemInfor);
+        return schItemInforMapper.selectSchItemInforList(schItemInfor, SecurityUtils.getUsername());
     }
 
     /**

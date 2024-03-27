@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="itemName"    column="item_name"    />
         <result property="predictStartTime"    column="predict_start_time"    />
         <result property="predictDurationTime"    column="predict_duration_time"    />
+        <result property="lastingTime"    column="lasting_time"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -17,13 +18,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSchItemSupervisionVo">
-        select item_id, item_name, predict_start_time, predict_duration_time, create_by, create_time, update_by, update_time, remark from sch_item_implement
+        select item_id, item_name, predict_start_time, predict_duration_time, lasting_time, create_by, create_time, update_by, update_time, remark from sch_item_implement
     </sql>
 
-    <select id="selectSchItemSupervisionList" parameterType="SchItemSupervision" resultMap="SchItemSupervisionResult">
+
+    <select id="selectSchItemSupervisionList" resultMap="SchItemSupervisionResult">
         <include refid="selectSchItemSupervisionVo"/>
         <where>  
-            <if test="itemName != null  and itemName != ''"> and item_name like concat('%', #{itemName}, '%')</if>
+            <if test="schItemSupervision.itemName != null  and schItemSupervision.itemName != ''"> 
+                and item_name like concat('%', #{schItemSupervision.itemName}, '%')
+            </if>
+            <if test="username != null and username != ''">
+                and create_by = #{username}
+            </if>
         </where>
     </select>
     
@@ -39,6 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="itemName != null and itemName != ''">item_name,</if>
             <if test="predictStartTime != null">predict_start_time,</if>
             <if test="predictDurationTime != null">predict_duration_time,</if>
+            <if test="lastingTime != null">lasting_time,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
@@ -64,6 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="itemName != null and itemName != ''">item_name = #{itemName},</if>
             <if test="predictStartTime != null">predict_start_time = #{predictStartTime},</if>
             <if test="predictDurationTime != null">predict_duration_time = #{predictDurationTime},</if>
+            <if test="lastingTime != null">lasting_time = #{lastingTime}.</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>

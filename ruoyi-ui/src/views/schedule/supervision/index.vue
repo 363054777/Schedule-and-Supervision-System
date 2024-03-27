@@ -120,6 +120,12 @@
         prop="predictDurationTime"
         sortable
       />
+      <el-table-column label="已持续时长" align="center" prop="lastingTime">
+        <template slot-scope="scope">
+          <!-- <span>{{ parseTime(scope.row.lastingTime, '{h}:{i}') }}</span> -->
+          <span>{{ scope.row.lastingTime }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         label="备注"
         align="center"
@@ -291,6 +297,7 @@ export default {
         this.total = response.total;
         this.loading = false;
         this.getItemNames();
+        console.log(this.supervisionList)
       });
     },
     // 取消按钮
@@ -305,6 +312,7 @@ export default {
         itemName: null,
         predictStartTime: null,
         predictDurationTime: null,
+        lastingTime: null,
         createBy: null,
         createTime: null,
         updateBy: null,
@@ -417,10 +425,6 @@ export default {
     },
     /** 获得项目名 */
     getItemNames() {
-      // // 发送请求获取sch_item_infor中的item_name数据，假设API为getItemNames
-      // getItemInfor().then(response => {
-      //   this.itemNames = response.data; // 更新itemNames数组
-      // });
       getItemName().then(response => {
         this.itemList = response.data;
         // this.$set(this.form, "name", response.name);
@@ -433,10 +437,7 @@ export default {
               return;
             }
           });
-          console.log(element.status);
         });
-        console.log(this.itemList);
-        console.log(this.supervisionList);
       });
     },
     /** 打卡按钮 */

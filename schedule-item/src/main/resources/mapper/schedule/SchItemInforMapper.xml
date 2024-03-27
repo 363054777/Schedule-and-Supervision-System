@@ -94,7 +94,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="getValidItem" parameterType="String" resultMap="SchItemInforResult">
         <include refid="selectSchItemInforVo"/>
         <where>  
-            <if test="itemName != null  and itemName != ''"> and create_by = #{itemName}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{username}</if>
             <if test="ifFinished != null  and ifFinished != ''"> and if_finished = '0'</if>
         </where>
     </select>

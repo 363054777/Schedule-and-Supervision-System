@@ -1,6 +1,9 @@
 package com.ruoyi.schedule.mapper;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.ruoyi.schedule.domain.SchItemInfor;
 
 /**
@@ -25,7 +28,7 @@ public interface SchItemInforMapper
      * @param schItemInfor 日程管理
      * @return 日程管理集合
      */
-    public List<SchItemInfor> selectSchItemInforList(SchItemInfor schItemInfor);
+    public List<SchItemInfor> selectSchItemInforList(@Param("schItemInfor")SchItemInfor schItemInfor, @Param("username")String username);
 
     /**
      * 新增日程管理

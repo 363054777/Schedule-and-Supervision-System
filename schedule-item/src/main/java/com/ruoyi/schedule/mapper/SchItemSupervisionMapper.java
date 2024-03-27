@@ -2,7 +2,10 @@ package com.ruoyi.schedule.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.ruoyi.schedule.domain.SchItemSupervision;
+
 
 /**
  * 日程查看Mapper接口
@@ -23,10 +26,9 @@ public interface SchItemSupervisionMapper
     /**
      * 查询日程查看列表
      * 
-     * @param schItemSupervision 日程查看
      * @return 日程查看集合
      */
-    public List<SchItemSupervision> selectSchItemSupervisionList(SchItemSupervision schItemSupervision);
+    public List<SchItemSupervision> selectSchItemSupervisionList(@Param("schItemSupervision")SchItemSupervision schItemSupervision, @Param("username")String username);
 
     /**
      * 新增日程查看

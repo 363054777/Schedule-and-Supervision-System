@@ -46,7 +46,7 @@ public class SchItemSupervisionServiceImpl implements ISchItemSupervisionService
      */
     @Override
     public List<SchItemSupervision> selectSchItemSupervisionList(SchItemSupervision schItemSupervision) {
-        return schItemSupervisionMapper.selectSchItemSupervisionList(schItemSupervision);
+        return schItemSupervisionMapper.selectSchItemSupervisionList(schItemSupervision, SecurityUtils.getUsername());
     }
 
     /**

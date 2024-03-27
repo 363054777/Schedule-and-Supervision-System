@@ -1,6 +1,7 @@
 package com.ruoyi.schedule.domain;
 
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -33,6 +34,11 @@ public class SchItemSupervision extends BaseEntity
     /** 预计执行时长 */
     @Excel(name = "预计执行时长")
     private BigDecimal predictDurationTime;
+
+    /** 已持续时长 */
+    @JsonFormat(pattern = "HH:mm:ss")
+    @Excel(name = "已持续时长", width = 20, dateFormat = "HH:mm:ss")
+    private Time lastingTime;
 
     public void setItemId(Long itemId) 
     {
@@ -71,6 +77,16 @@ public class SchItemSupervision extends BaseEntity
         return predictDurationTime;
     }
 
+    public void setLastingTime(Time lastingTime)
+    {
+        this.lastingTime = lastingTime;
+    }
+    public Time getLastingTime()
+    {
+        return lastingTime;
+    }
+
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -78,6 +94,7 @@ public class SchItemSupervision extends BaseEntity
             .append("itemName", getItemName())
             .append("predictStartTime", getPredictStartTime())
             .append("predictDurationTime", getPredictDurationTime())
+            .append("lastingTime", getLastingTime())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())
