@@ -232,15 +232,35 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 计时单元 -->
+    <el-dialog
+      title="计时监督"
+      :visible.sync="timerDialogVisible"
+      append-to-body
+      custom-class="timer"
+    >
+      <timer 
+        @closeChange="closeTimer($event)"
+      ></timer>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { listSupervision, getSupervision, delSupervision, addSupervision, updateSupervision, getItemInfor, getItemName } from "@/api/schedule/supervision";
+import { listSupervision, getSupervision, delSupervision, addSupervision, updateSupervision, getItemName } from "@/api/schedule/supervision";
+import { eventBus } from "@/utils/schedule/supervision/eventBus.js";
 
 export default {
   name: "Supervision",
   dicts: ['item_finished_type'],
+  components: 
+  { 
+    timer: () => import("./timer")
+  },
+  setup( ){
+  },
   data () {
     return {
       // 遮罩层
@@ -283,6 +303,7 @@ export default {
         ],
       },
       itemList: [], // 存储item_name选项的数组
+      timerDialogVisible: false // 计时器是否打开
     };
   },
   created () {
@@ -297,12 +318,10 @@ export default {
         this.total = response.total;
         this.loading = false;
         this.getItemNames();
-        console.log(this.supervisionList)
       });
     },
     // 取消按钮
     cancel () {
-      this.open = false;
       this.reset();
     },
     // 表单重置
@@ -444,13 +463,24 @@ export default {
     handleClockIn (row) {
       // 这里可以添加打卡的其他逻辑
       const itemName = row.itemName;
-      this.$modal.confirm('开始打卡日程项目名为"' + itemName + '"?').then(function () {
-        return;
-      }).then(() => {
-        this.getList();
-        this.$modal.msgSuccess("打卡成功");
-      }).catch(() => { });
+      // this.$modal.confirm('开始打卡日程项目名为"' + itemName + '"?').then(function () {
+      //   return;
+      // }).then(() => {
+      //   this.getList();
+      //   this.$modal.msgSuccess("打卡成功");
+      // }).catch(() => { });
+      eventBus.$emit('receiveData', row);
+      this.timerDialogVisible = true;
     },
+    closeTimer(timerDialogVisible) {
+      this.timerDialogVisible = timerDialogVisible;
+    }
   }
 };
 </script>
+
+<style>
+.timer{
+  min-width: max-content;
+}
+</style>
