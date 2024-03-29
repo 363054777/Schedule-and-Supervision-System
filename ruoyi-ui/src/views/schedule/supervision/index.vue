@@ -19,6 +19,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="选择开始日期" prop="predictStartTime">
+        <el-date-picker clearable
+          v-model="queryParams.predictStartTime"
+          type="date"
+          value-format="yyyy-MM-dd"
+          placeholder="请选择预计开始日期">
+        </el-date-picker>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -290,6 +298,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         itemName: null,
+        predictStartTime: null,
       },
       // 表单参数
       form: {},
@@ -313,6 +322,7 @@ export default {
     /** 查询日程查看列表 */
     getList () {
       this.loading = true;
+      console.log(this.queryParams);
       listSupervision(this.queryParams).then(response => {
         this.supervisionList = response.rows;
         this.total = response.total;
@@ -323,6 +333,7 @@ export default {
     // 取消按钮
     cancel () {
       this.reset();
+      this.open=false;
     },
     // 表单重置
     reset () {

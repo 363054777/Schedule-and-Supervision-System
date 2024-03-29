@@ -31,6 +31,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="username != null and username != ''">
                 and create_by = #{username}
             </if>
+            <if test="schItemSupervision.predictStartTime != null">
+                and DATE(predict_start_time) = DATE(#{schItemSupervision.predictStartTime})
+            </if>
         </where>
     </select>
     
