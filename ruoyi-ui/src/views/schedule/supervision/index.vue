@@ -253,11 +253,22 @@
       ></timer>
     </el-dialog>
 
+    <!-- 打卡提示框 -->
+    <el-dialog
+      title="提示"
+      :visible.sync="alarmDialogVisible"
+      width="30%">
+      <span>存在日程即将开始，请准时打卡！</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="alarmDialogVisible = false" round icon="el-icon-check"></el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { listSupervision, getSupervision, delSupervision, addSupervision, updateSupervision, getItemName, addLastintTime } from "@/api/schedule/supervision";
+import { listSupervision, getSupervision, delSupervision, addSupervision, updateSupervision, getItemName } from "@/api/schedule/supervision";
 import { eventBus } from "@/utils/schedule/supervision/eventBus.js";
 
 export default {
@@ -314,6 +325,9 @@ export default {
       itemList: [], // 存储item_name选项的数组
       timerDialogVisible: false, // 计时器是否打开
       clockInRow: null, 
+      alarmTime: [], // 存放即将到来的日程
+      alarmer: null, // 存放警报事件
+      alarmDialogVisible: false, // 打卡提示框是否打开
     };
   },
   created () {
@@ -328,7 +342,20 @@ export default {
         this.total = response.total;
         this.loading = false;
         this.getItemNames();
+        this.getAlarmTimeFromSupervisionList(response.rows);
       });
+    },
+    // 将各个日程中预计开始时间提取出来
+    getAlarmTimeFromSupervisionList(rows) {
+      window.clearInterval(this.alarmer);
+      rows.forEach(element => {
+        if(new Date(element.predictStartTime) > new Date()){
+          this.alarmTime.push(element.predictStartTime);
+        }
+      });
+      if(this.alarmTime.length > 0){
+        this.alarmSchedule();
+      }
     },
     // 取消按钮
     cancel () {
@@ -489,7 +516,7 @@ export default {
       this.timerDialogVisible = timerDialogVisible;
       var addedRow = this.clockInRow;
       addedRow.lastingTime = this.timeAdd(this.clockInRow.lastingTime, addTime);
-      console.log(addedRow);
+      // console.log(addedRow);
       updateSupervision(addedRow);
     },
     timeAdd(time1, time2) {
@@ -508,7 +535,21 @@ export default {
       var t = h.toString().padStart(2, '0') + ":" + m.toString().padStart(2, '0') + ":" + s.toString().padStart(2, '0');
       console.log("time:  " + t);
       return t;
-    }
+    },
+    alarmSchedule() {
+      this.alarmer = setInterval(() => {
+        this.alarmTime.forEach(element => {
+          console.log(new Date());
+          if(this.timeEqual(new Date(element), new Date())){
+            window.clearInterval(this.alarmer);
+            this.alarmDialogVisible = true;
+          }
+        });
+      }, 1000);
+    },
+    timeEqual(time1, time2){
+      return time1-time2 < 600000? true : false;
+    },
   }
 };
 </script>

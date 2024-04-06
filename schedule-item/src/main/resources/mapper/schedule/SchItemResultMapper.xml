@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.schedule.mapper.SchItemResultMapper">
+    
+    <resultMap type="SchItemResult" id="SchItemResultResult">
+        <result property="resultId"    column="result_id"    />
+        <result property="itemId"    column="item_id"    />
+        <result property="predictStartTime"    column="predict_start_time"    />
+        <result property="finishTime"    column="finish_time"    />
+        <result property="ifTimely"    column="if_timely"    />
+        <result property="lastingTime"    column="lasting_time"    />
+        <result property="totalSetTime"    column="total_set_time"    />
+        <result property="score"    column="score"    />
+        <result property="comment"    column="comment"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSchItemResultVo">
+        select result_id, item_id, predict_start_time, finish_time, if_timely, lasting_time, total_set_time, score, comment, create_by, create_time, update_by, update_time, remark from sch_item_result
+    </sql>
+
+    <select id="selectSchItemResultList" parameterType="SchItemResult" resultMap="SchItemResultResult">
+        <include refid="selectSchItemResultVo"/>
+        <where>  
+            <if test="itemId != null "> and item_id = #{itemId}</if>
+        </where>
+    </select>
+    
+    <select id="selectSchItemResultByResultId" parameterType="Long" resultMap="SchItemResultResult">
+        <include refid="selectSchItemResultVo"/>
+        where result_id = #{resultId}
+    </select>
+        
+    <insert id="insertSchItemResult" parameterType="SchItemResult" useGeneratedKeys="true" keyProperty="resultId">
+        insert into sch_item_result
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="itemId != null">item_id,</if>
+            <if test="predictStartTime != null">predict_start_time,</if>
+            <if test="finishTime != null">finish_time,</if>
+            <if test="ifTimely != null">if_timely,</if>
+            <if test="lastingTime != null">lasting_time,</if>
+            <if test="totalSetTime != null">total_set_time,</if>
+            <if test="score != null">score,</if>
+            <if test="comment != null">comment,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="itemId != null">#{itemId},</if>
+            <if test="predictStartTime != null">#{predictStartTime},</if>
+            <if test="finishTime != null">#{finishTime},</if>
+            <if test="ifTimely != null">#{ifTimely},</if>
+            <if test="lastingTime != null">#{lastingTime},</if>
+            <if test="totalSetTime != null">#{totalSetTime},</if>
+            <if test="score != null">#{score},</if>
+            <if test="comment != null">#{comment},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSchItemResult" parameterType="SchItemResult">
+        update sch_item_result
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="itemId != null">item_id = #{itemId},</if>
+            <if test="predictStartTime != null">predict_start_time = #{predictStartTime},</if>
+            <if test="finishTime != null">finish_time = #{finishTime},</if>
+            <if test="ifTimely != null">if_timely = #{ifTimely},</if>
+            <if test="lastingTime != null">lasting_time = #{lastingTime},</if>
+            <if test="totalSetTime != null">total_set_time = #{totalSetTime},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="comment != null">comment = #{comment},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where result_id = #{resultId}
+    </update>
+
+    <delete id="deleteSchItemResultByResultId" parameterType="Long">
+        delete from sch_item_result where result_id = #{resultId}
+    </delete>
+
+    <delete id="deleteSchItemResultByResultIds" parameterType="String">
+        delete from sch_item_result where result_id in 
+        <foreach item="resultId" collection="array" open="(" separator="," close=")">
+            #{resultId}
+        </foreach>
+    </delete>
+</mapper>
