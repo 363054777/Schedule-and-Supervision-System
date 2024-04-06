@@ -75,7 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="itemName != null and itemName != ''">item_name = #{itemName},</if>
             <if test="predictStartTime != null">predict_start_time = #{predictStartTime},</if>
             <if test="predictDurationTime != null">predict_duration_time = #{predictDurationTime},</if>
-            <if test="lastingTime != null">lasting_time = #{lastingTime}.</if>
+            <if test="lastingTime != null">lasting_time = #{lastingTime},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>

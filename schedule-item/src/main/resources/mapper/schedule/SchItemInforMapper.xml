@@ -22,11 +22,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select item_id, item_name, start_time, duration_time, if_finished, previous_item_id, create_by, create_time, update_by, update_time, remark from sch_item_infor
     </sql>
 
-    <select id="selectSchItemInforList" parameterType="SchItemInfor" resultMap="SchItemInforResult">
+    <select id="selectSchItemInforList" resultMap="SchItemInforResult">
         <include refid="selectSchItemInforVo"/>
         <where>  
-            <if test="itemName != null  and itemName != ''"> and item_name like concat('%', #{itemName}, '%')</if>
-            <if test="ifFinished != null  and ifFinished != ''"> and if_finished = #{ifFinished}</if>
+            <if test="schItemInfor.itemName != null and schItemInfor.itemName != ''"> and item_name like concat('%', #{schItemInfor.itemName}, '%')</if>
+            <if test="username != null  and username != ''"> and create_by = #{username}</if>
         </where>
     </select>
     

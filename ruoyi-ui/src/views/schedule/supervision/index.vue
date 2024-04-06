@@ -249,7 +249,7 @@
       custom-class="timer"
     >
       <timer 
-        @closeChange="closeTimer($event)"
+        @closeChange="closeTimer"
       ></timer>
     </el-dialog>
 
@@ -257,7 +257,7 @@
 </template>
 
 <script>
-import { listSupervision, getSupervision, delSupervision, addSupervision, updateSupervision, getItemName } from "@/api/schedule/supervision";
+import { listSupervision, getSupervision, delSupervision, addSupervision, updateSupervision, getItemName, addLastintTime } from "@/api/schedule/supervision";
 import { eventBus } from "@/utils/schedule/supervision/eventBus.js";
 
 export default {
@@ -312,7 +312,8 @@ export default {
         ],
       },
       itemList: [], // 存储item_name选项的数组
-      timerDialogVisible: false // 计时器是否打开
+      timerDialogVisible: false, // 计时器是否打开
+      clockInRow: null, 
     };
   },
   created () {
@@ -322,7 +323,6 @@ export default {
     /** 查询日程查看列表 */
     getList () {
       this.loading = true;
-      console.log(this.queryParams);
       listSupervision(this.queryParams).then(response => {
         this.supervisionList = response.rows;
         this.total = response.total;
@@ -377,7 +377,7 @@ export default {
     /** 修改按钮操作 */
     handleUpdate (row) {
       this.reset();
-      const itemId = row.itemId || this.ids
+      const itemId = row.itemId || this.ids;
       getSupervision(itemId).then(response => {
         this.form = response.data;
         this.schItemInforList = response.data.schItemInforList;
@@ -391,6 +391,7 @@ export default {
         if (valid) {
           this.form.schItemInforList = this.schItemInforList;
           if (this.form.itemId != null) {
+            console.log(this.form);
             updateSupervision(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
@@ -409,7 +410,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete (row) {
       const itemIds = row.itemId || this.ids;
-      this.$modal.confirm('是否确认删除日程查看编号为"' + itemIds + '"的数据项？').then(function () {
+      this.$modal.confirm('是否确认删除名为"' + row.itemName + '"的日程？').then(function () {
         return delSupervision(itemIds);
       }).then(() => {
         this.getList();
@@ -481,10 +482,32 @@ export default {
       //   this.$modal.msgSuccess("打卡成功");
       // }).catch(() => { });
       eventBus.$emit('receiveData', row);
+      this.clockInRow = row;
       this.timerDialogVisible = true;
     },
-    closeTimer(timerDialogVisible) {
+    closeTimer(timerDialogVisible, addTime) {
       this.timerDialogVisible = timerDialogVisible;
+      var addedRow = this.clockInRow;
+      addedRow.lastingTime = this.timeAdd(this.clockInRow.lastingTime, addTime);
+      console.log(addedRow);
+      updateSupervision(addedRow);
+    },
+    timeAdd(time1, time2) {
+      var h1 = time1.slice(0,2);
+      var m1 = time1.slice(3,5);
+      var s1 = time1.slice(6,8);
+
+      var h2 = time2.slice(0,2);
+      var m2 = time2.slice(3,5);
+      var s2 = time2.slice(6,8);
+
+      var s = (parseInt(s1) + parseInt(s2)) % 60;
+      var m = Math.floor(parseInt(m1) + parseInt(m2) + (parseInt(s1) + parseInt(s2)) / 60) % 60;
+      var h = Math.floor(parseInt(h1) + parseInt(h2) + Math.floor(parseInt(m1) + parseInt(m2) + (parseInt(s1) + parseInt(s2)) / 60) / 60) % 60;
+
+      var t = h.toString().padStart(2, '0') + ":" + m.toString().padStart(2, '0') + ":" + s.toString().padStart(2, '0');
+      console.log("time:  " + t);
+      return t;
     }
   }
 };
