@@ -42,3 +42,12 @@ export function delResult(resultId) {
     method: 'delete'
   })
 }
+
+// 根据日程查看完成的日程项添加日程结果
+export function addResultFromSupervision(data) {
+  return request({
+    url: '/schedule/result/add',
+    method: 'post',
+    data: data
+  })
+}

@@ -156,7 +156,7 @@
             size="mini"
             type="text"
             icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
+            @click="handleDelete1(scope.row)"
             v-hasPermi="['schedule:supervision:remove']"
           >结束</el-button>
         </template>
@@ -270,6 +270,7 @@
 <script>
 import { listSupervision, getSupervision, delSupervision, addSupervision, updateSupervision, getItemName } from "@/api/schedule/supervision";
 import { eventBus } from "@/utils/schedule/supervision/eventBus.js";
+import { addResultFromSupervision } from "@/api/schedule/result";
 
 export default {
   name: "Supervision",
@@ -435,6 +436,17 @@ export default {
       });
     },
     /** 删除按钮操作 */
+    handleDelete1(row) {
+      const itemIds = row.itemId || this.ids;
+      this.$modal.confirm('是否确认删除名为"' + row.itemName + '"的日程？').then(function () {
+        console.log(row);
+        addResultFromSupervision(row);
+        return ;
+      }).then(() => {
+        this.getList();
+        this.$modal.msgSuccess("删除成功");
+      }).catch(() => { });
+    },
     handleDelete (row) {
       const itemIds = row.itemId || this.ids;
       this.$modal.confirm('是否确认删除名为"' + row.itemName + '"的日程？').then(function () {

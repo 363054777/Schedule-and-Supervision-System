@@ -17,6 +17,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.schedule.domain.SchItemResult;
+import com.ruoyi.schedule.domain.SchItemSupervision;
 import com.ruoyi.schedule.service.ISchItemResultService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -100,5 +101,14 @@ public class SchItemResultController extends BaseController
     public AjaxResult remove(@PathVariable Long[] resultIds)
     {
         return toAjax(schItemResultService.deleteSchItemResultByResultIds(resultIds));
+    }
+
+    @PreAuthorize("@ss.hasPermi('schedule:result:add')")
+    @Log(title = "日程结果", businessType = BusinessType.INSERT)
+    @PostMapping("/add")
+    public AjaxResult addFromSupervision(@RequestBody SchItemSupervision schItemSupervision)
+    {
+        return toAjax(schItemResultService.insertSchItemResultFromSupervision(schItemSupervision));
+        
     }
 }

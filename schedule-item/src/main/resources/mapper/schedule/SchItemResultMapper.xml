@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="SchItemResult" id="SchItemResultResult">
         <result property="resultId"    column="result_id"    />
         <result property="itemId"    column="item_id"    />
+        <result property="itemName" column="item_name"/>
         <result property="predictStartTime"    column="predict_start_time"    />
         <result property="finishTime"    column="finish_time"    />
         <result property="ifTimely"    column="if_timely"    />
@@ -22,13 +23,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSchItemResultVo">
-        select result_id, item_id, predict_start_time, finish_time, if_timely, lasting_time, total_set_time, score, comment, create_by, create_time, update_by, update_time, remark from sch_item_result
+        select r.result_id, r.item_id, i.item_name, r.predict_start_time, r.finish_time, r.if_timely, r.lasting_time, r.total_set_time, r.score, r.comment, r.create_by, r.create_time, r.update_by, r.update_time, r.remark from sch_item_result as r INNER JOIN sch_item_implement as i on r.item_id = i.item_id
     </sql>
 
     <select id="selectSchItemResultList" parameterType="SchItemResult" resultMap="SchItemResultResult">
         <include refid="selectSchItemResultVo"/>
         <where>  
-            <if test="itemId != null "> and item_id = #{itemId}</if>
+            <if test="schItemResult.itemId != null "> and r.item_id = #{schItemResult.itemId}</if>
+            <if test="username != null and username != ''">
+                and r.create_by = #{username}
+            </if>
         </where>
     </select>
     
@@ -101,4 +105,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{resultId}
         </foreach>
     </delete>
+
+    <insert id="insertSchItemResultFromSupervision">
+        insert into sch_item_result
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="itemId != null">item_id,</if>
+            <if test="predictStartTime != null">predict_start_time,</if>
+            <if test="finishTime != null">finish_time,</if>
+            <if test="ifTimely != null">if_timely,</if>
+            <if test="lastingTime != null">lasting_time,</if>
+            <if test="totalSetTime != null">total_set_time,</if>
+            <if test="score != null">score,</if>
+            <if test="comment != null">comment,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="itemId != null">#{itemId},</if>
+            <if test="predictStartTime != null">#{predictStartTime},</if>
+            <if test="finishTime != null">#{finishTime},</if>
+            <if test="ifTimely != null">#{ifTimely},</if>
+            <if test="lastingTime != null">#{lastingTime},</if>
+            <if test="totalSetTime != null">#{totalSetTime},</if>
+            <if test="score != null">#{score},</if>
+            <if test="comment != null">#{comment},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
 </mapper>

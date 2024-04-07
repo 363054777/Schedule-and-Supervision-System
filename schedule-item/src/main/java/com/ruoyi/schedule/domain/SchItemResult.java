@@ -1,6 +1,7 @@
 package com.ruoyi.schedule.domain;
 
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -25,12 +26,18 @@ public class SchItemResult extends BaseEntity
     @Excel(name = "日程项编号")
     private Long itemId;
 
+    /** 日程项目名 */
+    @Excel(name = "日程项目名")
+    private String itemName;
+
     /** 预计开始时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "预计开始时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @Excel(name = "预计开始时间", width = 30, dateFormat = "yyyy-MM-dd yyyy-MM-dd HH:mm")
     private Date predictStartTime;
 
     /** 结束时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @Excel(name = "结束时间", width = 30, dateFormat = "yyyy-MM-dd yyyy-MM-dd HH:mm")
     private Date finishTime;
 
     /** 是否及时打卡（0不及时 1及时） */
@@ -38,9 +45,9 @@ public class SchItemResult extends BaseEntity
     private String ifTimely;
 
     /** 持续时长 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "持续时长", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date lastingTime;
+    @JsonFormat(pattern = "HH:mm:ss")
+    @Excel(name = "持续时长", width = 30, dateFormat = "HH:mm:ss")
+    private Time lastingTime;
 
     /** 设定总时长 */
     @Excel(name = "设定总时长")
@@ -72,6 +79,15 @@ public class SchItemResult extends BaseEntity
     {
         return itemId;
     }
+    public void setItemName(String itemName)
+    {
+        this.itemName = itemName;
+    }
+
+    public String getItemName()
+    {
+        return itemName;
+    }
     public void setPredictStartTime(Date predictStartTime) 
     {
         this.predictStartTime = predictStartTime;
@@ -99,7 +115,7 @@ public class SchItemResult extends BaseEntity
     {
         return ifTimely;
     }
-    public void setLastingTime(Date lastingTime) 
+    public void setLastingTime(Time lastingTime) 
     {
         this.lastingTime = lastingTime;
     }

@@ -2,6 +2,7 @@ package com.ruoyi.schedule.service;
 
 import java.util.List;
 import com.ruoyi.schedule.domain.SchItemResult;
+import com.ruoyi.schedule.domain.SchItemSupervision;
 
 /**
  * 日程结果Service接口
@@ -58,4 +59,12 @@ public interface ISchItemResultService
      * @return 结果
      */
     public int deleteSchItemResultByResultId(Long resultId);
+
+    /**
+     * 新增日程结果
+     * 
+     * @param SchItemSupervision 日程结果
+     * @return 结果
+     */
+    public int insertSchItemResultFromSupervision(SchItemSupervision schItemSupervision);
 }

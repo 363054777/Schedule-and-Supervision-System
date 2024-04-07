@@ -63,11 +63,10 @@
 
     <el-table v-loading="loading" :data="resultList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="结果编号" align="center" prop="resultId" />
-      <el-table-column label="日程项编号" align="center" prop="itemId" />
+      <el-table-column label="日程项目名" align="center" prop="itemName" />
       <el-table-column label="预计开始时间" align="center" prop="predictStartTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.predictStartTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.predictStartTime, '{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="是否及时打卡" align="center" prop="ifTimely">
@@ -77,10 +76,21 @@
       </el-table-column>
       <el-table-column label="持续时长" align="center" prop="lastingTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.lastingTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ scope.row.lastingTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="设定总时长" align="center" prop="totalSetTime" />
+      <el-table-column label="评分" align="center" prop="score">
+        <template  slot-scope="scope">
+          <el-rate
+            v-model="scope.row.score"
+            disabled
+            show-score
+            text-color="#ff9900"
+            score-template="{ value }">
+          </el-rate>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -89,14 +99,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['schedule:result:edit']"
-          >修改</el-button>
+          >评分</el-button>
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-delete"
+            icon="el-icon-edit-outline"
             @click="handleDelete(scope.row)"
             v-hasPermi="['schedule:result:remove']"
-          >删除</el-button>
+          >自我评价</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -118,41 +128,34 @@
         <el-form-item label="预计开始时间" prop="predictStartTime">
           <el-date-picker clearable
             v-model="form.predictStartTime"
-            type="date"
-            value-format="yyyy-MM-dd"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm"
             placeholder="请选择预计开始时间">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="结束时间" prop="finishTime">
           <el-date-picker clearable
             v-model="form.finishTime"
-            type="date"
-            value-format="yyyy-MM-dd"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm"
             placeholder="请选择结束时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="是否及时打卡" prop="ifTimely">
-          <el-input v-model="form.ifTimely" placeholder="请输入是否及时打卡" />
-        </el-form-item>
+        <el-table-column label="是否及时打卡" align="center" prop="ifTimely">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.sch_if_timely" :value="scope.row.ifTimely"/>
+          </template>
+        </el-table-column>
         <el-form-item label="持续时长" prop="lastingTime">
           <el-date-picker clearable
             v-model="form.lastingTime"
-            type="date"
-            value-format="yyyy-MM-dd"
+            type="datetime"
+            value-format="HH:mm:ss"
             placeholder="请选择持续时长">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="设定总时长" prop="totalSetTime">
           <el-input v-model="form.totalSetTime" placeholder="请输入设定总时长" />
-        </el-form-item>
-        <el-form-item label="日程项评分" prop="score">
-          <el-input v-model="form.score" placeholder="请输入日程项评分" />
-        </el-form-item>
-        <el-form-item label="日程项评价" prop="comment">
-          <el-input v-model="form.comment" placeholder="请输入日程项评价" />
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -168,6 +171,7 @@ import { listResult, getResult, delResult, addResult, updateResult } from "@/api
 
 export default {
   name: "Result",
+  dicts: ['sch_if_timely'],
   data() {
     return {
       // 遮罩层
@@ -218,6 +222,7 @@ export default {
         this.resultList = response.rows;
         this.total = response.total;
         this.loading = false;
+        console.log(this.resultList);
       });
     },
     // 取消按钮
@@ -280,6 +285,7 @@ export default {
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
+        console.log(this.form);
         if (valid) {
           if (this.form.resultId != null) {
             updateResult(this.form).then(response => {

@@ -1,7 +1,11 @@
 package com.ruoyi.schedule.mapper;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.ruoyi.schedule.domain.SchItemResult;
+import com.ruoyi.schedule.domain.SchItemSupervision;
 
 /**
  * 日程结果Mapper接口
@@ -25,7 +29,7 @@ public interface SchItemResultMapper
      * @param schItemResult 日程结果
      * @return 日程结果集合
      */
-    public List<SchItemResult> selectSchItemResultList(SchItemResult schItemResult);
+    public List<SchItemResult> selectSchItemResultList(@Param("schItemResult")SchItemResult schItemResult,  @Param("username")String username);
 
     /**
      * 新增日程结果
@@ -58,4 +62,6 @@ public interface SchItemResultMapper
      * @return 结果
      */
     public int deleteSchItemResultByResultIds(Long[] resultIds);
+
+    public int insertSchItemResultFromSupervision(SchItemSupervision schItemSupervision);
 }

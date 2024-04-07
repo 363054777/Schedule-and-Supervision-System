@@ -1,11 +1,16 @@
 package com.ruoyi.schedule.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.schedule.mapper.SchItemResultMapper;
 import com.ruoyi.schedule.domain.SchItemResult;
+import com.ruoyi.schedule.domain.SchItemSupervision;
 import com.ruoyi.schedule.service.ISchItemResultService;
 
 /**
@@ -41,7 +46,7 @@ public class SchItemResultServiceImpl implements ISchItemResultService
     @Override
     public List<SchItemResult> selectSchItemResultList(SchItemResult schItemResult)
     {
-        return schItemResultMapper.selectSchItemResultList(schItemResult);
+        return schItemResultMapper.selectSchItemResultList(schItemResult, SecurityUtils.getUsername());
     }
 
     /**
@@ -54,6 +59,7 @@ public class SchItemResultServiceImpl implements ISchItemResultService
     public int insertSchItemResult(SchItemResult schItemResult)
     {
         schItemResult.setCreateTime(DateUtils.getNowDate());
+        schItemResult.setCreateBy(SecurityUtils.getUsername());
         return schItemResultMapper.insertSchItemResult(schItemResult);
     }
 
@@ -67,6 +73,7 @@ public class SchItemResultServiceImpl implements ISchItemResultService
     public int updateSchItemResult(SchItemResult schItemResult)
     {
         schItemResult.setUpdateTime(DateUtils.getNowDate());
+        schItemResult.setUpdateBy(SecurityUtils.getUsername());
         return schItemResultMapper.updateSchItemResult(schItemResult);
     }
 
@@ -92,5 +99,36 @@ public class SchItemResultServiceImpl implements ISchItemResultService
     public int deleteSchItemResultByResultId(Long resultId)
     {
         return schItemResultMapper.deleteSchItemResultByResultId(resultId);
+    }
+
+    /**
+     * 新增日程结果
+     * 
+     * @param SchItemSupervision 日程结果
+     * @return 结果
+     */
+    @Override
+    public int insertSchItemResultFromSupervision(SchItemSupervision schItemSupervision)
+    {
+        SchItemResult schItemResult = new SchItemResult();
+        schItemResult.setCreateTime(DateUtils.getNowDate());
+        schItemResult.setCreateBy(SecurityUtils.getUsername());
+        schItemResult.setItemId(schItemSupervision.getItemId());
+        schItemResult.setPredictStartTime(schItemSupervision.getPredictStartTime());
+        schItemResult.setFinishTime(new Date());
+        schItemResult.setLastingTime(schItemSupervision.getLastingTime());
+        schItemResult.setTotalSetTime(schItemSupervision.getPredictDurationTime());
+        Date startDate = schItemResult.getPredictStartTime();
+        Date endDate = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        if(format.format(startDate).equals(format.format(endDate)))
+        {
+            schItemResult.setIfTimely("1");
+        }
+        else
+        {
+            schItemResult.setIfTimely("0");
+        }
+        return schItemResultMapper.insertSchItemResult(schItemResult);
     }
 }
