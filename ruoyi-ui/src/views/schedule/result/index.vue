@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="日程项编号" prop="itemId">
+      <el-form-item label="日程项目名" prop="itemName">
         <el-input
-          v-model="queryParams.itemId"
-          placeholder="请输入日程项编号"
+          v-model="queryParams.itemName"
+          placeholder="请输入日程项目名"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -16,7 +16,7 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="primary"
           plain
@@ -25,7 +25,7 @@
           @click="handleAdd"
           v-hasPermi="['schedule:result:add']"
         >新增</el-button>
-      </el-col>
+      </el-col> -->
       <el-col :span="1.5">
         <el-button
           type="success"
@@ -97,14 +97,14 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
+            @click="handleRate(scope.row)"
             v-hasPermi="['schedule:result:edit']"
           >评分</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit-outline"
-            @click="handleDelete(scope.row)"
+            @click="handleComment(scope.row)"
             v-hasPermi="['schedule:result:remove']"
           >自我评价</el-button>
         </template>
@@ -163,6 +163,50 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 打分对话框 -->
+    <el-dialog :title="title" :visible.sync="rateDialogVisible" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+        <el-form-item label="日程项目名" prop="itemName">
+          <el-input v-model="form.itemName" placeholder="请输入日程项目名" disabled/>
+        </el-form-item>
+        <el-form-item label="自我评分" prop="score">
+          <el-rate
+            v-model="form.score"
+            allow-half
+            show-score
+            text-color="#ff9900"
+            score-template="{value}">
+          </el-rate>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="closeRateDialog">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 评价对话框 -->
+    <el-dialog :title="title" :visible.sync="commentDialogVisible" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="日程项目名" prop="itemName">
+          <el-input v-model="form.itemName" placeholder="请输入日程项目名" disabled/>
+        </el-form-item>
+        <el-form-item label="自我评价" prop="comment">
+          <el-input
+            type="textarea"
+            autosize
+            placeholder="请输入内容"
+            v-model="form.comment"
+            clearable>
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="closeRateDialog">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -208,7 +252,11 @@ export default {
         predictStartTime: [
           { required: true, message: "预计开始时间不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 打分框是否可视化
+      rateDialogVisible: false,
+      // 评价框是否可视化
+      commentDialogVisible: false,
     };
   },
   created() {
@@ -235,12 +283,13 @@ export default {
       this.form = {
         resultId: null,
         itemId: null,
+        itemName: null,
         predictStartTime: null,
         finishTime: null,
         ifTimely: null,
         lastingTime: null,
         totalSetTime: null,
-        score: null,
+        score: 0,
         comment: null,
         createBy: null,
         createTime: null,
@@ -282,6 +331,30 @@ export default {
         this.title = "修改日程结果";
       });
     },
+    /** 打分按钮 */
+    handleRate(row) {
+      this.reset();
+      const resultId = row.resultId;
+      getResult(resultId).then(response => {
+        this.form = response.data;
+        this.rateDialogVisible = true;
+        this.title = "打分";
+      });
+    },
+    /** 关闭对话框 */ 
+    closeRateDialog(){
+      this.rateDialogVisible = false;
+      this.commentDialogVisible = false;
+    },
+    handleComment(row) {
+      this.reset();
+      const resultId = row.resultId;
+      getResult(resultId).then(response => {
+        this.form = response.data;
+        this.commentDialogVisible = true;
+        this.title = "自我评价";
+      });
+    },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
@@ -301,6 +374,8 @@ export default {
             });
           }
         }
+        this.rateDialogVisible = false;
+        this.commentDialogVisible = false;
       });
     },
     /** 删除按钮操作 */

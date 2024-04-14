@@ -23,13 +23,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSchItemResultVo">
-        select r.result_id, r.item_id, i.item_name, r.predict_start_time, r.finish_time, r.if_timely, r.lasting_time, r.total_set_time, r.score, r.comment, r.create_by, r.create_time, r.update_by, r.update_time, r.remark from sch_item_result as r INNER JOIN sch_item_implement as i on r.item_id = i.item_id
+        select r.result_id, r.item_id, i.item_name, r.predict_start_time, r.finish_time, r.if_timely, r.lasting_time, r.total_set_time, r.score, r.comment, r.create_by, r.create_time, r.update_by, r.update_time, r.remark from sch_item_result as r INNER JOIN sch_item_infor as i on r.item_id = i.item_id
     </sql>
 
     <select id="selectSchItemResultList" parameterType="SchItemResult" resultMap="SchItemResultResult">
         <include refid="selectSchItemResultVo"/>
         <where>  
-            <if test="schItemResult.itemId != null "> and r.item_id = #{schItemResult.itemId}</if>
+            <if test="schItemResult.itemName != null "> and i.item_name = #{schItemResult.itemName}</if>
             <if test="username != null and username != ''">
                 and r.create_by = #{username}
             </if>

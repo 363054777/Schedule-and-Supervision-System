@@ -441,7 +441,7 @@ export default {
       this.$modal.confirm('是否确认删除名为"' + row.itemName + '"的日程？').then(function () {
         console.log(row);
         addResultFromSupervision(row);
-        return ;
+        return delSupervision(itemIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
