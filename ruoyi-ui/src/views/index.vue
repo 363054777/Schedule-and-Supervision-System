@@ -67,7 +67,7 @@
       </el-col>
     </el-row>
     <el-divider />
-    <el-row :gutter="20">
+    <el-row :gutter="20" v-loading="loading">
       <div style="text-align: left;">
             <H2>日程预览</H2>
         </div>
@@ -164,6 +164,8 @@
 </template>
 
 <script>
+import { getItemByDate } from "@/api/main";
+
 export default {
   name: "Index",
   data () {
@@ -171,23 +173,42 @@ export default {
       // 版本号
       version: "1.0.0",
       value: new Date(),
+      loading:true,
       scheduleData: [
-        {
-          workingDay: "04-01",
-          content: "有1个日程",
-        },
-        {
-          workingDay: "04-03",
-          content: "有2个日程",
-        },
+        // {
+        //   workingDay: "04-01",
+        //   content: "有1个日程",
+        // },
+        // {
+        //   workingDay: "04-03",
+        //   content: "有2个日程",
+        // },
       ],
     };
   },
   methods: {
     goTarget (href) {
       window.open(href, "_blank");
+    },
+    getItemCountData(){
+      this.loading=true;
+      getItemByDate().then(response => {
+        // console.log(response.rows);
+        response.rows.forEach(element => {
+          var item = {
+            workingDay: element.workingDay,
+            content: "有"+element.itemCount+"个日程",
+          };
+          console.log(item);
+          this.scheduleData.push(item);
+        });
+        this.loading=false;
+      });
     }
-  }
+  },
+  mounted() {
+    this.getItemCountData();
+  },
 };
 </script>
 

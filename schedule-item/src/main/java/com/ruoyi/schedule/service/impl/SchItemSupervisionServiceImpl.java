@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.schedule.mapper.SchItemInforMapper;
 import com.ruoyi.schedule.mapper.SchItemSupervisionMapper;
 import com.ruoyi.schedule.domain.SchItemInfor;
+import com.ruoyi.schedule.domain.SchItemResult;
 import com.ruoyi.schedule.domain.SchItemSupervision;
 import com.ruoyi.schedule.service.ISchItemSupervisionService;
 
@@ -112,5 +113,16 @@ public class SchItemSupervisionServiceImpl implements ISchItemSupervisionService
     @Override
     public List<SchItemInfor> selectSchItemInforList() {
         return schItemInforMapper.getValidItem(SecurityUtils.getUsername());
+    }
+
+    /**
+     * 新增日程结果
+     * 
+     * @param SchItemSupervision 日程结果
+     * @return 结果
+     */
+    @Override
+    public List<SchItemSupervision> countItemByDate() {
+        return schItemSupervisionMapper.getItemCount(SecurityUtils.getUsername());
     }
 }

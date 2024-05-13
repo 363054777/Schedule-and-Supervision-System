@@ -99,4 +99,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="getItemByName" resultType="java.lang.Long">
         SELECT item_id FROM sch_item_infor WHERE item_name = #{itemName}
     </select>
+
+    <select id="getItemCount" parameterType="String">
+        SELECT DATE(predict_start_time) as workingDay, count(*) as itemCount
+        FROM sch_item_implement
+        WHERE create_by = #{itemName}
+        GROUP BY DATE(predict_start_time)
+    </select>
 </mapper>

@@ -63,4 +63,6 @@ public interface SchItemSupervisionMapper
     public int deleteSchItemSupervisionByItemIds(Long[] itemIds);
 
     public Long getItemByName(String itemName);
+
+    public List<SchItemSupervision> getItemCount(String username);
 }

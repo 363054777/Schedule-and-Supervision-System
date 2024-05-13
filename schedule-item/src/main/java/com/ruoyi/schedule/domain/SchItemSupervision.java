@@ -40,6 +40,14 @@ public class SchItemSupervision extends BaseEntity
     @Excel(name = "已持续时长", width = 20, dateFormat = "HH:mm:ss")
     private Time lastingTime;
 
+    /** 工作日期 */
+    @JsonFormat(pattern = "MM-dd")
+    @Excel(name = "预计开始时间", width = 30, dateFormat = "MM-dd")
+    private Date workingDay;
+
+    /** 日程数量 */
+    private int itemCount;
+
     public void setItemId(Long itemId) 
     {
         this.itemId = itemId;
@@ -86,6 +94,22 @@ public class SchItemSupervision extends BaseEntity
         return lastingTime;
     }
 
+    public void setWorkingDay(Date workingDay)
+    {
+        this.workingDay = workingDay;
+    }
+    public Date getWorkingDay(){
+        return workingDay;
+    }
+
+    public void setItemCount(int itemCount)
+    {
+        this.itemCount = itemCount;
+    }
+    public int getItemCount(){
+        return itemCount;
+    }
+
 
     @Override
     public String toString() {
@@ -100,6 +124,8 @@ public class SchItemSupervision extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .append("remark", getRemark())
+            .append("workingDay", getWorkingDay())
+            .append("itemCount", getItemCount())
             .toString();
     }
 }
