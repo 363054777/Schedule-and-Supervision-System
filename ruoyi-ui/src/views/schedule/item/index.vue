@@ -68,7 +68,7 @@
           v-hasPermi="['schedule:item:export']"
         >导出</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="info"
           plain
@@ -77,7 +77,7 @@
           @click="handleSchedule"
           v-hasPermi="['schedule:item:schedule']"
         >生成日程</el-button>
-      </el-col>
+      </el-col> -->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 

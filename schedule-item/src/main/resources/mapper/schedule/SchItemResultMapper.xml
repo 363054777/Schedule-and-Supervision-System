@@ -15,6 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="totalSetTime"    column="total_set_time"    />
         <result property="score"    column="score"    />
         <result property="comment"    column="comment"    />
+        <result property="ifShow"    column="if_show"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -23,13 +24,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSchItemResultVo">
-        select r.result_id, r.item_id, i.item_name, r.predict_start_time, r.finish_time, r.if_timely, r.lasting_time, r.total_set_time, r.score, r.comment, r.create_by, r.create_time, r.update_by, r.update_time, r.remark from sch_item_result as r INNER JOIN sch_item_infor as i on r.item_id = i.item_id
+        select r.result_id, r.item_id, i.item_name, r.predict_start_time, r.finish_time, r.if_timely, r.lasting_time, r.total_set_time, r.score, r.comment, r.if_show, r.create_by, r.create_time, r.update_by, r.update_time, r.remark from sch_item_result as r INNER JOIN sch_item_infor as i on r.item_id = i.item_id
     </sql>
 
     <select id="selectSchItemResultList" parameterType="SchItemResult" resultMap="SchItemResultResult">
         <include refid="selectSchItemResultVo"/>
         <where>  
             <if test="schItemResult.itemName != null "> and i.item_name = #{schItemResult.itemName}</if>
+            <if test="true"> and r.if_show = '1'</if> 
             <if test="username != null and username != ''">
                 and r.create_by = #{username}
             </if>
@@ -52,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="totalSetTime != null">total_set_time,</if>
             <if test="score != null">score,</if>
             <if test="comment != null">comment,</if>
+            <if test="ifShow != null"> and if_show,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
@@ -67,6 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="totalSetTime != null">#{totalSetTime},</if>
             <if test="score != null">#{score},</if>
             <if test="comment != null">#{comment},</if>
+            <if test="ifShow != null">'1',</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
@@ -95,16 +99,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where result_id = #{resultId}
     </update>
 
-    <delete id="deleteSchItemResultByResultId" parameterType="Long">
+    <!-- <delete id="deleteSchItemResultByResultId" parameterType="Long">
         delete from sch_item_result where result_id = #{resultId}
-    </delete>
+    </delete> -->
+    <update id="deleteSchItemResultByResultId" parameterType="Long">
+        update sch_item_result set
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ifShow != null">if_show = '0',</if>
+        </trim>
+        where result_id = #{resultId}
+    </update>
 
-    <delete id="deleteSchItemResultByResultIds" parameterType="String">
+    <!-- <delete id="deleteSchItemResultByResultIds" parameterType="String">
         delete from sch_item_result where result_id in 
         <foreach item="resultId" collection="array" open="(" separator="," close=")">
             #{resultId}
         </foreach>
-    </delete>
+    </delete> -->
+    <update id="deleteSchItemResultByResultIds" parameterType="String">
+        update sch_item_result set if_show = '0' where result_id in 
+        <foreach item="resultId" collection="array" open="(" separator="," close=")">
+            #{resultId}
+        </foreach>
+    </update>
 
     <insert id="insertSchItemResultFromSupervision">
         insert into sch_item_result
@@ -117,6 +134,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="totalSetTime != null">total_set_time,</if>
             <if test="score != null">score,</if>
             <if test="comment != null">comment,</if>
+            <if test="ifShow != null"> if_show,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
@@ -132,6 +150,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="totalSetTime != null">#{totalSetTime},</if>
             <if test="score != null">#{score},</if>
             <if test="comment != null">#{comment},</if>
+            <if test="ifShow != null"> '1',</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>

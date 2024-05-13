@@ -61,6 +61,10 @@ public class SchItemResult extends BaseEntity
     @Excel(name = "日程项评价")
     private String comment;
 
+    /** 日程反馈中师范显示 */
+    @Excel(name = "日程反馈中师范显示")
+    private String ifShow;
+
     public void setResultId(Long resultId) 
     {
         this.resultId = resultId;
@@ -150,6 +154,15 @@ public class SchItemResult extends BaseEntity
     public String getComment() 
     {
         return comment;
+    }
+    public void setIfShow(String ifShow) 
+    {
+        this.ifShow = ifShow;
+    }
+
+    public String getIfShow() 
+    {
+        return ifShow;
     }
 
     @Override

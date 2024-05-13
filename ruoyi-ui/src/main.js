@@ -5,6 +5,9 @@ import Cookies from 'js-cookie'
 import Element from 'element-ui'
 import './assets/styles/element-variables.scss'
 
+// 将自动注册所有组件为全局组件
+import dataV from '@jiaminghi/data-view'
+
 import '@/assets/styles/index.scss' // global css
 import '@/assets/styles/ruoyi.scss' // ruoyi css
 import App from './App'
@@ -60,6 +63,10 @@ Vue.component('ImagePreview', ImagePreview)
 Vue.use(directive)
 Vue.use(plugins)
 Vue.use(VueMeta)
+
+//dataV
+Vue.use(dataV)
+
 DictData.install()
 
 /**
