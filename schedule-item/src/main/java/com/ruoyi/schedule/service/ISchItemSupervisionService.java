@@ -61,7 +61,7 @@ public interface ISchItemSupervisionService
      */
     public int deleteSchItemSupervisionByItemId(Long itemId);
 
-    public Long getItemByName(String itemName);
+    public Long getItemByName(String itemName, String username);
 
     /**
      * 获取可用日程

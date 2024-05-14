@@ -1,6 +1,6 @@
 <template>
   <div class="app-container home">
-    <el-row :gutter="20">
+    <!-- <el-row :gutter="20">
       <el-col :sm="24" :lg="24">
         <blockquote class="text-warning" style="font-size: 14px">
           <b class="text-success">已经完成</b><br />
@@ -14,7 +14,7 @@
 
         <hr />
       </el-col>
-    </el-row>
+    </el-row> -->
     <el-row :gutter="20">
       <el-col :sm="24" :lg="12" style="padding-left: 20px">
         <h2>日程安排与监督系统</h2>

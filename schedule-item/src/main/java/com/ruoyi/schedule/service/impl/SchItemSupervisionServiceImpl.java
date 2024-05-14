@@ -59,7 +59,7 @@ public class SchItemSupervisionServiceImpl implements ISchItemSupervisionService
     @Override
     public int insertSchItemSupervision(SchItemSupervision schItemSupervision) {
         schItemSupervision.setCreateTime(DateUtils.getNowDate());
-        schItemSupervision.setItemId(getItemByName(schItemSupervision.getItemName()));
+        schItemSupervision.setItemId(getItemByName(schItemSupervision.getItemName(),SecurityUtils.getUsername()));
         schItemSupervision.setCreateBy(SecurityUtils.getUsername());
         return schItemSupervisionMapper.insertSchItemSupervision(schItemSupervision);
     }
@@ -100,8 +100,8 @@ public class SchItemSupervisionServiceImpl implements ISchItemSupervisionService
     }
 
     @Override
-    public Long getItemByName(String itemName) {
-        return schItemSupervisionMapper.getItemByName(itemName);
+    public Long getItemByName(String itemName, String username) {
+        return schItemSupervisionMapper.getItemByName(itemName, username);
     }
 
     /**

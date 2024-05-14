@@ -97,7 +97,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <select id="getItemByName" resultType="java.lang.Long">
-        SELECT item_id FROM sch_item_infor WHERE item_name = #{itemName}
+        SELECT item_id FROM sch_item_infor WHERE 
+        item_name = #{itemName} 
+        <if test="username != null">AND create_by = #{username}</if>
     </select>
 
     <select id="getItemCount" parameterType="String">
