@@ -3,7 +3,6 @@ package com.ruoyi.schedule.service;
 import java.util.List;
 
 import com.ruoyi.schedule.domain.SchItemInfor;
-import com.ruoyi.schedule.domain.SchItemResult;
 import com.ruoyi.schedule.domain.SchItemSupervision;
 
 /**

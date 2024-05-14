@@ -63,24 +63,24 @@
 
     <el-table v-loading="loading" :data="resultList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="日程项目名" align="center" prop="itemName" />
-      <el-table-column label="预计开始时间" align="center" prop="predictStartTime" width="180">
+      <el-table-column label="日程项目名" align="center" prop="itemName" sortable/>
+      <el-table-column label="预计开始时间" align="center" prop="predictStartTime" width="180" sortable>
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.predictStartTime, '{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="是否及时打卡" align="center" prop="ifTimely">
+      <el-table-column label="是否及时打卡" align="center" prop="ifTimely" sortable>
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sch_if_timely" :value="scope.row.ifTimely"/>
         </template>
       </el-table-column>
-      <el-table-column label="持续时长" align="center" prop="lastingTime" width="180">
+      <el-table-column label="持续时长" align="center" prop="lastingTime" width="180" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.lastingTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="设定总时长" align="center" prop="totalSetTime" />
-      <el-table-column label="评分" align="center" prop="score">
+      <el-table-column label="设定总时长" align="center" prop="totalSetTime" sortable/>
+      <el-table-column label="评分" align="center" prop="score" sortable>
         <template  slot-scope="scope">
           <el-rate
             v-model="scope.row.score"

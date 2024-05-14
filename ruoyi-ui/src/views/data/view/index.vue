@@ -14,8 +14,13 @@
           <div ref="circleChart3" style="height: 250px; width: 250px;"></div>
           <div ref="circleChart4" style="height: 250px; width: 250px;"></div>
           <div ref="circleChart5" style="height: 250px; width: 250px;"></div> -->
-          <div v-for="(item, index) in circleChartData" :key="'index'" :id="`circleChart${index}`" style="height: 250px; width: 250px;">
-          </div>
+          <!-- <div v-for="(item, index) in circleChartData" :key="'index'" :id="`circleChart${index}`" style="height: 250px; width: 250px;">
+          </div> -->
+          <div :id="`circleChart0`" style="height: 250px; width: 250px;"></div>
+          <div :id="`circleChart1`" style="height: 250px; width: 250px;"></div>
+          <div :id="`circleChart2`" style="height: 250px; width: 250px;"></div>
+          <div :id="`circleChart3`" style="height: 250px; width: 250px;"></div>
+          <div :id="`circleChart4`" style="height: 250px; width: 250px;"></div>
         </div>
       </dv-border-box-8>
     </div>
@@ -70,6 +75,7 @@
 <script>
 
 import * as echarts from 'echarts';
+import { getProgress, getTotalLasting, getComment, getTimely, getScore, getMonthTime } from "@/api/data/view";
 
 export default {
   name: "View",
@@ -83,30 +89,30 @@ export default {
       activeName: '1',
       // 日程进度数据
       circleChartData: [
-        { value: 0, name: "1123" },
-        { value: 0, name: "2263" },
-        { value: 20, name: "日程1" },
-        { value: 5, name: "1" },
+        // { value: 0, name: "1123" },
+        // { value: 0, name: "2263" },
+        // { value: 20, name: "日程1" },
+        // { value: 5, name: "1" },
       ],
       // 日程及时率数据
       config: {
         data: [
-          {
-            name: "2263",
-            value: 0,
-          },
-          {
-            name: "1123",
-            value: 0,
-          },
-          {
-            name: "日程1",
-            value: 100,
-          },
-          {
-            name: "1",
-            value: 66.7,
-          },
+          // {
+          //   name: "2263",
+          //   value: 0,
+          // },
+          // {
+          //   name: "1123",
+          //   value: 0,
+          // },
+          // {
+          //   name: "日程1",
+          //   value: 100,
+          // },
+          // {
+          //   name: "1",
+          //   value: 66.7,
+          // },
         ],
         rowNum: 10,
         waitTime: 10000,
@@ -115,13 +121,9 @@ export default {
       commitData: {
         header: ['项目名', '日期', '评论'],
         data: [
-          ['日程1', '2024-03-03 03:00', '非常不错'],
-          ['1', '2024-04-07 00:48', ''],
-          ['1', '2024-04-18 01:51', '完成的很好'],
-          ['1', '2024-04-24 17:51', '还有提升空间'],
-          ['1', '2024-04-26 12:23', ''],
-          ['1', '2024-04-28 12:29', 'asdasdada'],
-          ['1', '2024-04-28 16:42', '继续加油'],
+          // ['日程1', '2024-03-06 03:00', '非常不错'],
+          // ['1', '2024-04-07 00:48', ''],
+          // ['1', '2024-04-18 01:51', '完成的很好'],
         ],
         columnWidth: [50, 100, 200],
         index: true,
@@ -129,47 +131,122 @@ export default {
       // 日程均分数据
       scoreData: {
         data: [
-          {
-            name: '1',
-            value: 3.75
-          },
-          {
-            name: '日程1',
-            value: 3.0
-          },
-          {
-            name: '1123',
-            value: 0
-          },
-          {
-            name: '2263',
-            value: 0
-          },
+          // {
+          //   name: '1',
+          //   value: 3.75
+          // },
+          // {
+          //   name: '日程1',
+          //   value: 3.0
+          // },
+          // {
+          //   name: '1123',
+          //   value: 0
+          // },
+          // {
+          //   name: '2263',
+          //   value: 0
+          // },
         ],
 
         showValue: true,
       },
       // 日程完成时长数据
       pieChartData: [
-        { name: "1", value: 4.3 },
-        { name: "日程1", value: 2},
+        // { name: "1", value: 4.3 },
+        // { name: "日程1", value: 2},
       ],
       // 日程总时长数据
       TotalTimeChartData: [
-        { value: 0, name: "2263" },
-        { value: 0, name: "1123" },
-        { value: 47, name: "日程1" },
-        { value: 15, name: "1" },
+        // { value: 0, name: "2263" },
+        // { value: 0, name: "1123" },
+        // { value: 47, name: "日程1" },
+        // { value: 15, name: "1" },
       ],
       // 每月时长
       eachMonthTimeData: [
-        0, 15, 10, 31, 0, 0, 0, 0, 0, 0, 0, 0
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
       ],
     };
   },
   created () {
+    // this.initData();
   },
   methods: {
+    initData(){
+      getProgress().then(response => {
+        response.rows.forEach(element => {
+          var progress =
+          {
+            name:element.itemName,
+            value:parseInt(element.totalTime * 100 / element.durationTime),
+          };
+          if(progress.value > 100) progress.value = 100;
+          if(progress.value < 0) progress.value = 0;
+
+          this.circleChartData.push(progress);
+        });
+        this.setCircleChart();
+      });
+
+      getTotalLasting().then(response => {
+        console.log(response.rows);
+        response.rows.forEach(element => {
+          var lasting =
+          {
+            name:element.itemName,
+            value:element.totalLasting,
+          };
+          this.pieChartData.push(lasting);
+
+          var totalTime = 
+          {
+            name: element.itemName,
+            value: parseInt(element.totalLasting / 3600),
+          }
+          this.TotalTimeChartData.push(totalTime);
+        });
+        this.setPieChart();
+        this.setTotalTimeChart();
+      });
+
+      getComment().then(response => {
+        response.rows.forEach(element => {
+          var comment =
+          [element.itemName, element.date.slice(0,10) + " " + element.date.slice(11,16), element.comment];
+          this.commitData.data.push(comment);
+        });
+        this.commitData = {...this.commitData};
+      });
+
+      getTimely().then(response => {
+        response.rows.forEach(element => {
+          var timely = {
+            name: element.itemName, 
+            value: parseInt(element.timelySum * 100 / element.itemCount)};
+          this.config.data.push(timely);
+        });
+        this.config = {...this.config};
+      });
+
+      getScore().then(response => {
+        response.rows.forEach(element => {
+          var score = {
+            name: element.itemName,
+            value: Math.round(element.avgScore * 100) / 100
+          };
+          this.scoreData.data.push(score);
+        });
+        this.scoreData = {...this.scoreData};
+      });
+
+      getMonthTime().then(response => {
+        response.rows.forEach(element => {
+          this.eachMonthTimeData[parseInt(element.month)] = element.totalTime;
+        });
+        this.eachMonthTimeChart();
+      });
+    },
     setCircleChart() {
       this.circleChartData.map((item, i) =>{
         const myChart = echarts.init(document.getElementById(`circleChart${i}`));
@@ -406,15 +483,16 @@ export default {
     }
   },
   mounted () {
+    this.initData();
     // this.setCircleChart1();
     // this.setCircleChart2();
     // this.setCircleChart3();
     // this.setCircleChart4();
     // this.setCircleChart5();
-    this.setCircleChart();
-    this.setPieChart();
-    this.setTotalTimeChart();
-    this.eachMonthTimeChart();
+    // this.setCircleChart();
+    // this.setPieChart();
+    // this.setTotalTimeChart();
+    // this.eachMonthTimeChart();
   }
 };
 </script>

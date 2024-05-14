@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.data.mapper.ViewMapper">
+    
+  <resultMap type="ViewResult" id="View_Result">
+    <result property="itemId"    column="item_id"    />
+    <result property="itemName"    column="item_name"    />
+    <result property="durationTime"    column="duration_time"    />
+    <result property="totalTime"    column="total_time"    />
+    <result property="totalLasting"    column="total_lasting"    />
+  </resultMap>
+
+  <resultMap type="Comment" id="Comment_Result">
+    <result property="itemId"    column="item_id"    />
+    <result property="itemName"    column="item_name"    />
+    <result property="date"    column="date"    />
+    <result property="comment"    column="comment"    />
+  </resultMap>
+
+  <resultMap type="Timely" id="Timely_Result">
+    <result property="itemId"    column="item_id"    />
+    <result property="itemName"    column="item_name"    />
+    <result property="timelySum"    column="timelySum"    />
+    <result property="itemCount"    column="itemCount"    />
+  </resultMap>
+
+  <resultMap type="Score" id="Score_Result">
+    <result property="itemId"    column="item_id"    />
+    <result property="itemName"    column="item_name"    />
+    <result property="avgScore"    column="avgScore"    />
+  </resultMap>
+
+  <resultMap type="MonthTime" id="MonthTime_Result">
+    <result property="month"    column="month"    />
+    <result property="totalTime"    column="total_time"    />
+  </resultMap>
+
+  <select id="selectProgress" resultMap="View_Result">
+    SELECT infor.item_id, item_name, duration_time, result.total_time
+    FROM sch_item_infor as infor
+    LEFT JOIN
+    (
+    SELECT sum(total_set_time) as total_time, item_id
+    FROM sch_item_result
+    GROUP BY item_id
+    ) as result
+    on infor.item_id = result.item_id
+    <where>
+        <if test="username != null  and username != ''"> and create_by = #{username}</if>
+    </where>
+  </select>
+
+  <select id="selectLasting" resultMap="View_Result">
+    SELECT infor.item_id, item_name, sum(CAST(lasting_time as DECIMAL(10,0))) as total_lasting
+    FROM sch_item_result as result
+    LEFT JOIN sch_item_infor as infor
+    ON infor.item_id = result.item_id
+    <where>
+      <if test="username != null  and username != ''"> and result.create_by = #{username}</if>
+    </where>
+    GROUP BY infor.item_id
+  </select>
+
+  <select id="selectComment" resultMap="Comment_Result">
+    SELECT infor.item_name, result.predict_start_time as `date`, `comment`
+    FROM sch_item_result as result
+    LEFT JOIN sch_item_infor as infor
+    ON result.item_id = infor.item_id
+    <where>
+      <if test="username != null  and username != ''"> and result.create_by = #{username}</if>
+    </where>
+  </select>
+
+  <select id="selectTimely" resultMap="Timely_Result">
+    SELECT result.item_id, item_name, SUM(if_timely) as timelySum, COUNT(if_timely) as itemCount
+    FROM sch_item_result as result
+    LEFT JOIN sch_item_infor as infor
+    ON infor.item_id = result.item_id
+    <where>
+      <if test="username != null  and username != ''"> and result.create_by = #{username}</if>
+    </where>
+    GROUP BY item_id
+  </select>
+
+  <select id="selectScore" resultMap="Score_Result">
+    SELECT result.item_id, item_name, CAST(AVG(score) AS double) as avgScore
+    FROM sch_item_result as result
+    LEFT JOIN sch_item_infor as infor
+    ON infor.item_id = result.item_id
+    <where>
+      <if test="username != null  and username != ''"> and result.create_by = #{username}</if>
+    </where>
+    GROUP BY item_id
+    ORDER BY avgScore DESC
+  </select>
+
+  <select id="selectMonthTime" resultMap="MonthTime_Result">
+    SELECT DATE_FORMAT(predict_start_time, '%c') AS `month`, SUM(total_set_time) as total_time
+    FROM sch_item_result
+    <where>
+      <if test="username != null  and username != ''"> and create_by = #{username}</if>
+    </where>
+    GROUP BY `month`
+    ORDER BY `month`
+  </select>
+
+</mapper>
