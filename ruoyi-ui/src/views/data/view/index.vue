@@ -49,19 +49,19 @@
             <div style="display: flex; justify-content: space-around;">
 
               <div style="display:flex; flex-direction: column;">
-                <h2 style="color: #3de7c9; width: 300px">日程均分</h2>
-                <dv-capsule-chart :config="scoreData" style="width:300px;height:215px"/>
+                <h2 style="color: #3de7c9; width: 250px">日程均分</h2>
+                <dv-capsule-chart :config="scoreData" style="width:250px;height:215px"/>
               </div>
 
               <div style="display:flex; flex-direction: column;">
-                <h2 style="color: #3de7c9; width: 300px">每月时长</h2>
+                <h2 style="color: #3de7c9; width: 250px">每月时长</h2>
                 <!-- <dv-capsule-chart :config="scoreData" style="width:300px;height:215px"/> -->
-                <div ref="eachMonthTimeChart" style="width:300px;height:230px"></div>
+                <div ref="eachMonthTimeChart" style="width:250px;height:230px"></div>
               </div>
 
               <div style="display:flex; flex-direction: column;">
-                <h2 style="color: #3de7c9; width: 300px">日程总时长</h2>
-                <div ref="totalTimeChart" style="width:300px;height:230px"></div>
+                <h2 style="color: #3de7c9; width: 250px">日程总时长</h2>
+                <div ref="totalTimeChart" style="width:250px;height:230px"></div>
               </div>
 
             </div>

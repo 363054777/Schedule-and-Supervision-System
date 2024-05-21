@@ -15,7 +15,7 @@
         <hr />
       </el-col>
     </el-row> -->
-    <el-row :gutter="20">
+    <!-- <el-row :gutter="20">
       <el-col :sm="24" :lg="12" style="padding-left: 20px">
         <h2>日程安排与监督系统</h2>
         <p>
@@ -65,7 +65,7 @@
           </el-col>
         </el-row>
       </el-col>
-    </el-row>
+    </el-row> -->
     <el-divider />
     <el-row :gutter="20" v-loading="loading">
       <div style="text-align: left;">
